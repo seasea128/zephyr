@@ -134,6 +134,9 @@ static int sd_init_io(struct sd_card *card)
 	/* Cards start with legacy timing and Maximum voltage Host controller support */
 	bus_io->timing = SDHC_TIMING_LEGACY;
 
+	// Force SPI bus to run at 1MHz initially instead of 400kHz
+	bus_io->clock = MHZ(1);
+
 	if (host_props->host_caps.vol_330_support) {
 		LOG_DBG("Host controller support 3.3V max");
 		voltage = SD_VOL_3_3_V;
@@ -169,8 +172,6 @@ static int sd_init_io(struct sd_card *card)
 	card->flags = 0U;
 	/* Delay so card can power up */
 	sd_delay(card->host_props.power_delay);
-	/* Start bus clock */
-	bus_io->clock = SDMMC_CLOCK_400KHZ;
 	ret = sdhc_set_io(card->sdhc, bus_io);
 	if (ret) {
 		LOG_ERR("Could not start bus clock");

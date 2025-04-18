@@ -10,3 +10,9 @@ config RTC_STM32
 	select USE_STM32_LL_RCC
 	help
 	  Build RTC driver for STM32 SoCs, excluding STM32F1 series.
+
+config RTC_STM32_SUBSECOND
+	bool "STM32 RTC driver"
+	depends on RTC_STM32 && !SOC_SERIES_STM32F1X && !SOC_SERIES_STM32F2X
+	help
+	  Enable subsecond support for RTC on supported STM32 SoCs.
